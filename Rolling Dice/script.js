@@ -14,8 +14,10 @@ let currentValue1 = document.querySelector('#current--0');
 let currentValue2 = document.querySelector('#current--1');
 let Score1 = document.querySelector('#score--0');
 let Score2 = document.querySelector('#score--1');
+let playing = 1;
 
 const resetGame = function () {
+  playing = 1;
   document.querySelector('#score--0').textContent = 0;
   document.querySelector('#score--1').textContent = 0;
   document.querySelector('.dice').classList.add('hidden');
@@ -24,8 +26,13 @@ const resetGame = function () {
   Active = 'player1';
   player2Card.classList.remove('player--active');
   player1Card.classList.add('player--active');
+  player1Card.classList.remove('player--winner');
+  player2Card.classList.remove('player--winner');
 };
+
 resetGame();
+
+//
 const switching = function () {
   if (Active == 'player1') {
     Active = 'player2';
@@ -43,48 +50,54 @@ const switching = function () {
 };
 
 const holdingScore = function () {
-  if (Active == 'player1') {
-    player1_HS += player1Current;
-    Score1.textContent = player1_HS;
-    if (player1_HS >= 100) {
-      player1Card.classList.remove('player--active');
-      player1Card.classList.add('player--winner');
-      Break;
+  if (playing) {
+    if (Active == 'player1') {
+      player1_HS += player1Current;
+      Score1.textContent = player1_HS;
+      if (player1_HS >= 100) {
+        playing = 0;
+        player1Card.classList.remove('player--active');
+        player1Card.classList.add('player--winner');
+        Break;
+      }
+      switching();
+    } else {
+      player2_HS += player2Current;
+      Score2.textContent = player2_HS;
+      if (player2_HS >= 100) {
+        playing = 0;
+        player2Card.classList.remove('player--active');
+        player2Card.classList.add('player--winner');
+        Break;
+      }
+      switching();
     }
-    switching();
-  } else {
-    player2_HS += player2Current;
-    Score2.textContent = player2_HS;
-    if (player2_HS >= 100) {
-      player2Card.classList.remove('player--active');
-      player2Card.classList.add('player--winner');
-      Break;
-    }
-    switching();
   }
 };
 
 const rollingDice = function () {
-  diceNum = Math.trunc(Math.random() * 6 + 1);
-  document.querySelector('.dice').src = `dice-${diceNum}.png`;
-  document.querySelector('.dice').classList.remove('hidden');
-  if (diceNum !== 1) {
-    if (Active == 'player1') {
-      player1Current += diceNum;
-      currentValue1.textContent = player1Current;
-    } else if (Active == 'player2') {
-      player2Current += diceNum;
-      currentValue2.textContent = player2Current;
-    }
-  } else {
-    if (Active == 'player1') {
-      player1Current = 0;
-      currentValue1.textContent = player1Current;
+  if (playing) {
+    diceNum = Math.trunc(Math.random() * 6 + 1);
+    document.querySelector('.dice').src = `dice-${diceNum}.png`;
+    document.querySelector('.dice').classList.remove('hidden');
+    if (diceNum !== 1) {
+      if (Active == 'player1') {
+        player1Current += diceNum;
+        currentValue1.textContent = player1Current;
+      } else if (Active == 'player2') {
+        player2Current += diceNum;
+        currentValue2.textContent = player2Current;
+      }
     } else {
-      player2Current = 0;
-      currentValue2.textContent = player2Current;
+      if (Active == 'player1') {
+        player1Current = 0;
+        currentValue1.textContent = player1Current;
+      } else {
+        player2Current = 0;
+        currentValue2.textContent = player2Current;
+      }
+      switching();
     }
-    switching();
   }
 };
 
