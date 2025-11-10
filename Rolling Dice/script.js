@@ -58,7 +58,7 @@ const holdingScore = function () {
         playing = 0;
         player1Card.classList.remove('player--active');
         player1Card.classList.add('player--winner');
-        Break;
+        Break();
       }
       switching();
     } else {
