@@ -46,10 +46,20 @@ const holdingScore = function () {
   if (Active == 'player1') {
     player1_HS += player1Current;
     Score1.textContent = player1_HS;
+    if (player1_HS >= 100) {
+      player1Card.classList.remove('player--active');
+      player1Card.classList.add('player--winner');
+      Break;
+    }
     switching();
   } else {
     player2_HS += player2Current;
     Score2.textContent = player2_HS;
+    if (player2_HS >= 100) {
+      player2Card.classList.remove('player--active');
+      player2Card.classList.add('player--winner');
+      Break;
+    }
     switching();
   }
 };
